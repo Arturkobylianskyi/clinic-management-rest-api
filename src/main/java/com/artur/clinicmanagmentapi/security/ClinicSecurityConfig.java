@@ -9,34 +9,19 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.client.HttpServerErrorException;
+
+import javax.sql.DataSource;
+import javax.xml.crypto.Data;
 
 @Configuration
 public class ClinicSecurityConfig {
 
     @Bean
-    public InMemoryUserDetailsManager userDetailsManager(){
-
-        UserDetails mary = User.builder()
-                .username("mary")
-                .password("{noop}test")
-                .roles("NURSE")
-                .build();
-
-        UserDetails john = User.builder()
-                .username("john")
-                .password("{noop}test")
-                .roles("NURSE", "DOCTOR")
-                .build();
-
-        UserDetails susan = User.builder()
-                .username("susan")
-                .password("{noop}test")
-                .roles("NURSE", "DOCTOR", "ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(mary, john, susan);
+    public JdbcUserDetailsManager userDetailsManager(DataSource dataSource){
+        return new JdbcUserDetailsManager(dataSource);
     }
 
     @Bean
@@ -60,5 +45,30 @@ public class ClinicSecurityConfig {
 
         return http.build();
     }
+
+/*  @Bean
+    public InMemoryUserDetailsManager userDetailsManager(){
+
+        UserDetails mary = User.builder()
+                .username("mary")
+                .password("{noop}test")
+                .roles("NURSE")
+                .build();
+
+        UserDetails john = User.builder()
+                .username("john")
+                .password("{noop}test")
+                .roles("NURSE", "DOCTOR")
+                .build();
+
+        UserDetails susan = User.builder()
+                .username("susan")
+                .password("{noop}test")
+                .roles("NURSE", "DOCTOR", "ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(mary, john, susan);
+    }
+*/
 
 }

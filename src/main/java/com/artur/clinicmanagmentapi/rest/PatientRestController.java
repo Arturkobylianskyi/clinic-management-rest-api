@@ -2,8 +2,11 @@ package com.artur.clinicmanagmentapi.rest;
 
 import com.artur.clinicmanagmentapi.entity.Patient;
 import com.artur.clinicmanagmentapi.service.PatientService;
+import com.artur.clinicmanagmentapi.service.PatientServiceImpl;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -32,6 +35,7 @@ public class PatientRestController {
     @GetMapping("/patients/{patientId}")
     public Patient getPatient(@PathVariable int patientId){
         Patient tempPatient = patientService.findById(patientId);
+
         return tempPatient;
     }
 
@@ -50,7 +54,7 @@ public class PatientRestController {
         Patient tempPatient = patientService.findById(patientId);
 
         if(tempPatient==null){
-            throw new RuntimeException("Patiend id not found");
+            throw new PatientNotFoundException("Patient with id: "+ patientId + " not found");
         }
         if(patchPayload.containsKey("id")){
             throw new RuntimeException("Id is not allowed in request");

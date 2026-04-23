@@ -1,13 +1,16 @@
 package com.artur.clinicmanagmentapi.security;
 
+import com.artur.clinicmanagmentapi.service.UserService;
 import jdk.jshell.spi.ExecutionControl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,22 +23,22 @@ import javax.xml.crypto.Data;
 public class ClinicSecurityConfig {
 
     @Bean
-    public JdbcUserDetailsManager userDetailsManager(DataSource dataSource){
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-
-        jdbcUserDetailsManager.setUsersByUsernameQuery(
-                "select user_id, pw, active from members where user_id=?"
-        );
-
-        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
-                "select user_id, role from roles where user_id=?"
-        );
-
-        return jdbcUserDetailsManager;
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public DaoAuthenticationProvider authenticationProvider(UserService userService) {
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider(userService);
+//        auth.setUserDetailsService(userService); deprecated
+        auth.setPasswordEncoder(passwordEncoder());
+
+        return auth;
+    }
+
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http.authorizeHttpRequests(configurer ->
                 configurer
@@ -51,12 +54,30 @@ public class ClinicSecurityConfig {
         http.httpBasic(Customizer.withDefaults());
 
         // disable csrf
-        http.csrf(csrf-> csrf.disable());
+        http.csrf(csrf -> csrf.disable());
 
         return http.build();
     }
 
-/*  @Bean
+}
+
+
+ /*  @Bean
+    public JdbcUserDetailsManager userDetailsManager(DataSource dataSource){
+        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+
+        jdbcUserDetailsManager.setUsersByUsernameQuery(
+                "select user_id, pw, active from members where user_id=?"
+        );
+
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
+                "select user_id, role from roles where user_id=?"
+        );
+
+        return jdbcUserDetailsManager;
+    }
+
+    @Bean
     public InMemoryUserDetailsManager userDetailsManager(){
 
         UserDetails mary = User.builder()
@@ -81,4 +102,4 @@ public class ClinicSecurityConfig {
     }
 */
 
-}
+

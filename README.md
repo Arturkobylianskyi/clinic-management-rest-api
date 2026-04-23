@@ -1,4 +1,4 @@
-# Simple Clinic Management REST API
+# Clinic Management REST API
 
 RESTful API for managing clinic patients, built with **Java** and **Spring Boot**. 
 

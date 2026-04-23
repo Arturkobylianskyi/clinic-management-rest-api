@@ -49,7 +49,9 @@ public class ClinicSecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/patients/**").hasRole("DOCTOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/patients/**").hasRole("ADMIN")
 
-                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").hasRole("ADMIN")
+
+                        .requestMatchers("/error").permitAll() // debug
         );
 
         // use http basic auth

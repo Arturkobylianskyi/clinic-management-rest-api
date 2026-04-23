@@ -19,7 +19,7 @@ public class UserDAOImpl implements UserDAO{
     @Override
     public User findByUserName(String userName) {
         TypedQuery<User> theQuery = entityManager.createQuery(
-                "from User where userName=:uName and enable=true", User.class);
+                "from User where userName=:uName and enabled=1", User.class);
 
         theQuery.setParameter("uName", userName);
 

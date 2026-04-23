@@ -48,6 +48,8 @@ public class ClinicSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/patients").hasRole("DOCTOR")
                         .requestMatchers(HttpMethod.PATCH, "/api/patients/**").hasRole("DOCTOR")
                         .requestMatchers(HttpMethod.DELETE, "/api/patients/**").hasRole("ADMIN")
+
+                        .requestMatchers("/error").permitAll()
         );
 
         // use http basic auth

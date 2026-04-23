@@ -16,14 +16,14 @@ public class User {
     @Column(name="username")
     private String userName;
 
-    @Column(name="enable")
-    private boolean enable;
+    @Column(name="enabled")
+    private int enabled;
 
     @Column(name="password")
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name="user_roles",
+    @JoinTable(name="users_roles",
         joinColumns = @JoinColumn(name="user_id"),
         inverseJoinColumns = @JoinColumn(name="role_id"))
     private Collection<Role> roles;
@@ -31,15 +31,15 @@ public class User {
 
     public User(){}
 
-    public User(String password, boolean enable, String userName) {
+    public User(String password, int enabled, String userName) {
         this.password = password;
-        this.enable = enable;
+        this.enabled = enabled;
         this.userName = userName;
     }
 
-    public User(String userName, boolean enable, String password, Collection<Role> roles) {
+    public User(String userName, int enabled, String password, Collection<Role> roles) {
         this.userName = userName;
-        this.enable = enable;
+        this.enabled = enabled;
         this.password = password;
         this.roles = roles;
     }
@@ -58,6 +58,14 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
     }
 
     public String getUserName() {

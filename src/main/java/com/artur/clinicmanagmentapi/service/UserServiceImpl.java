@@ -35,16 +35,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 
-        System.out.println("\n=== [ШПИГУН] ШУКАЮ КОРИСТУВАЧА: " + userName + " ===");
         User user = userDAO.findByUserName(userName);
 
         if(user==null){
-            System.out.println("=== [ШПИГУН] ПОМИЛКА: КОРИСТУВАЧА НЕ ЗНАЙДЕНО В БАЗІ! ===");
+
             throw new UsernameNotFoundException("invalid username or password");
         }
 
-        System.out.println("=== [ШПИГУН] ЗНАЙДЕНО: " + user.getUserName() + " ===");
-        System.out.println("=== [ШПИГУН] ХЕШ В БАЗІ: " + user.getPassword() + " ===");
 
         return new org.springframework.security.core.userdetails.User(
                 user.getUserName(),

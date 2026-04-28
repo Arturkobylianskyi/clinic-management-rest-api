@@ -3,7 +3,7 @@
 RESTful API for managing clinic patients, built with **Java** and **Spring Boot**. 
 
 ## Stack
-* **Java 25+**
+* **Java 25**
 * **Spring Boot 4** (Web, Data JPA, Security)
 * **Spring Security 6** (Role-Based Access Control, Custom UserDetailsService)
 * **Hibernate / Spring Data JPA** 
